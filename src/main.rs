@@ -1,6 +1,6 @@
-use gator::config::Config;
+use gator::config::{self, Config};
 use sqlx::{Connection, PgConnection};
-use std::{env, error::Error};
+use std::{collections::HashMap, env, error::Error};
 
 pub struct State {
     pub config: Config,
@@ -11,11 +11,17 @@ pub struct Command {
     args: Vec<String>,
 }
 
-pub fn handle_login(state: State, command: Command) -> Result<(), Box<dyn Error>> {
-    if command.args.is_empty() {
-        Err("Missing username")
-    }
+pub struct Commands {}
 
+impl Commands {}
+
+pub fn handle_login(mut state: State, command: Command, path: &str) -> Result<(), String> {
+    if command.args.is_empty() {
+        return Err("No username provided".to_string());
+    }
+    let new_user_name = &command.args[1];
+    state.config.current_user_name = new_user_name.clone();
+    println!("Logged in as {}", new_user_name);
     Ok(())
 }
 
