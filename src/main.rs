@@ -1,10 +1,29 @@
-use sqlx::{Connection, PgConnection, Row};
-use std::error::Error;
+use gator::config::Config;
+use sqlx::{Connection, PgConnection};
+use std::{env, error::Error};
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
+pub struct State {
+    pub config: Config,
+}
+
+pub struct Command {
+    name: String,
+    args: Vec<String>,
+}
+
+pub fn handle_login(state: State, command: Command) -> Result<(), Box<dyn Error>> {
+    if command.args.is_empty() {
+        Err("Missing username")
+    }
+
+    Ok(())
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let args: Vec<String> = env::args().collect();
+
     let url = "postgres://reidx:0794@localhost:5432/gatordb";
-    let mut conn = PgConnection::connect(url).await?;
+    let conn = PgConnection::connect(url);
 
     Ok(())
 }
