@@ -11,11 +11,31 @@ pub struct Command {
     args: Vec<String>,
 }
 
-pub struct Commands {}
+pub enum CommandType {
+    Login { username: String },
+    Register,
+    Run,
+}
 
-impl Commands {}
+pub fn parse_command(args: Vec<String>) -> Result<CommandType, String> {
+    if args.len() < 2 {
+        return Err("No command given.".to_string());
+    }
+    match args[1].as_str() {
+        "login" => {
+            if args.len() < 3 {
+                return Err("Usage: enter <username>".to_string());
+            } else {
+                Ok(CommandType::Login {
+                    username: args[2].clone(),
+                })
+            }
+        }
+        _ => Err("Unknown command.".to_string()),
+    }
+}
 
-pub fn handle_login(mut state: State, command: Command, path: &str) -> Result<(), String> {
+pub fn handle_login(mut state: State, command: Command) -> Result<(), String> {
     if command.args.is_empty() {
         return Err("No username provided".to_string());
     }
