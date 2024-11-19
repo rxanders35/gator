@@ -14,7 +14,7 @@ pub struct Command {
 pub enum CommandType {
     Login { username: String },
     Register,
-    Run,
+    Users,
 }
 
 pub fn parse_command(args: Vec<String>) -> Result<CommandType, String> {
@@ -30,6 +30,7 @@ pub fn parse_command(args: Vec<String>) -> Result<CommandType, String> {
                     username: args[2].clone(),
                 })
             }
+            //TODO: add Register and Users
         }
         _ => Err("Unknown command.".to_string()),
     }
